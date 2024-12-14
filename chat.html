@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Duplicate title tag - should remove one -->
+  <a href="/home"><title> AI Therapy </title></a>
+  <!-- Character encoding declaration -->
+  <meta charset="UTF-8" />
+  <!-- Responsive viewport settings -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    /* Base body styling with gradient background */
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #1a2a6c, #a8fcff);
+      padding: 20px;
+      font-family: Arial, sans-serif;
+    }
+
+    /* Main chat container with glassmorphism effect */
+    .chat-container {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 10px;
+      padding: 20px;
+      max-width: 800px;
+      margin: 0 auto;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Header styling with text shadow */
+    h1 {
+      color: white;
+      text-align: left;
+      padding: 20px;
+      margin-bottom: 30px;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .centered-text {
+      color: white;
+      display: block;
+      text-align: center;
+      /* Optional: for vertical centering in a container */
+      position: absolute;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    /* Messages container with scrolling */
+    .chat-messages {
+      height: 400px;
+      overflow-y: auto;
+      padding: 20px;
+    }
+
+    /* Base message bubble styling */
+    .message {
+      margin-bottom: 10px;
+      padding: 10px;
+      border-radius: 5px;
+    }
+
+    /* User message styling - aligned right */
+    .user-message {
+      background-color: #e3f2fd;
+      margin-left: 20%;
+    }
+
+    /* Bot message styling - aligned left */
+    .bot-message {
+      background-color: #f5f5f5;
+      margin-right: 20%;
+    }
+
+    /* Error message styling */
+    .message.error {
+      background-color: #ffebee;
+      color: #c62828;
+      border: 1px solid #ffcdd2;
+    }
+
+    /* Input area container */
+    .input-container {
+      padding: 20px;
+      border-top: 1px solid #ddd;
+      display: flex;
+      gap: 10px;
+    }
+
+    /* Text input field styling */
+    #user-input {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+
+    /* Send button styling */
+    button {
+      padding: 10px 20px;
+      background-color: #2196f3;
+      color: white;
+      border: none;
+      border-radius: 100px;
+      cursor: pointer;
+      height: 100%;
+    }
+
+    /* Button hover effect */
+    button:hover {
+      background-color: #64b3f4;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>­ ­ AI Therapy</h1>
+  <div class="chat-container">
+    <!-- Container for chat messages -->
+    <div class="chat-messages" id="chat-messages">
+      <!-- Messages will be added here dynamically -->
+    </div>
+    <!-- User input area -->
+    <div class="input-container">
+      <input type="text" id="user-input" placeholder="Type your message..." />
+      <button onclick="sendMessage()">Send</button>
+    </div>
+  </div>
+
+  <script>
+    /**
+     * Handles sending messages to the API and displaying responses
+     * Clears input field after sending and handles errors
+     */
+    async function sendMessage() {
+      const input = document.getElementById("user-input");
+      const message = input.value.trim();
+      if (message === "") return;
+
+      // Display user message and clear input
+      addMessage(message, "user-message");
+      input.value = "";
+
+      try {
+        // Send message to API
+        const response = await fetch('/api/chat', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ message })
+        });
+
+        // Check for HTTP errors
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        // Parse response and check for API errors
+        const data = await response.json();
+        if (data.error) {
+          throw new Error(data.error);
+        }
+
+        // Display bot response
+        addMessage(data.response, "bot-message");
+      } catch (error) {
+        console.error('Error:', error);
+        addMessage(`Error: ${error.message || 'Something went wrong'}`, "bot-message error");
+      }
+    }
+
+    /**
+     * Adds a new message to the chat container
+     * @param {string} text - The message text to display
+     * @param {string} className - CSS class for styling the message
+     */
+    function addMessage(text, className) {
+      const messagesDiv = document.getElementById("chat-messages");
+      const messageDiv = document.createElement("div");
+      messageDiv.className = `message ${className}`;
+      messageDiv.textContent = text;
+      messagesDiv.appendChild(messageDiv);
+      messagesDiv.scrollTop = messagesDiv.scrollHeight; // Auto-scroll to bottom
+    }
+  </script>
+</body>
+
+</html>

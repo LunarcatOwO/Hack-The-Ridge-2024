@@ -4,15 +4,16 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npm init -y && node server.js"
+    "start": "npm install && npm ci && node server.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
   "dependencies": {
     "@google/generative-ai": "^0.21.0",
     "dotenv": "^16.4.7",
     "express": "^4.21.2"
-  }
+  },
+  "devDependencies": {},
+  "description": ""
 }

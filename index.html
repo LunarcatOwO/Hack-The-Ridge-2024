@@ -1,111 +1,161 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AI Therapy</title>
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 20px;
-        background-color: #f0f0f0;
-      }
-      .chat-container {
-        max-width: 600px;
-        margin: 0 auto;
-        background-color: lightblue;
-        border-radius: 10px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-      }
-      .chat-messages {
-        height: 400px;
-        overflow-y: auto;
-        padding: 20px;
-      }
-      .message {
-        margin-bottom: 10px;
-        padding: 10px;
-        border-radius: 5px;
-      }
-      .user-message {
-        background-color: #e3f2fd;
-        margin-left: 20%;
-      }
-      .bot-message {
-        background-color: #f5f5f5;
-        margin-right: 20%;
-      }
-      .input-container {
-        padding: 20px;
-        border-top: 1px solid #ddd;
-      }
-      #user-input {
-        width: 80%;
-        padding: 10px;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        margin-right: 10px;
-      }
-      button {
-        padding: 10px 20px;
-        background-color: #2196f3;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-      }
-      button:hover {
-        background-color: #1976d2;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="chat-container">
-      <div class="chat-messages" id="chat-messages">
-        <!-- Messages will be added here -->
-      </div>
-      <div class="input-container">
-        <input type="text" id="user-input" placeholder="Type your message..." />
-        <button onclick="sendMessage()">Send</button>
-      </div>
+
+<head>
+  <title> AI Therapy </title>
+  <!-- Character encoding declaration -->
+  <meta charset="UTF-8" />
+  <!-- Responsive viewport settings -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    /* Base body styling with gradient background */
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #1a2a6c, #a8fcff);
+      padding: 20px;
+      font-family: Arial, sans-serif;
+    }
+
+    /* Main chat container with glassmorphism effect */
+    .chat-container {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 10px;
+      padding: 20px;
+      max-width: 800px;
+      margin: 0 auto;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Header styling with text shadow */
+    h1 {
+      color: white;
+      text-align: left;
+      padding: 20px;
+      margin-bottom: 30px;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .centered-text {
+      color: white;
+      display: block;
+      text-align: center;
+      /* Optional: for vertical centering in a container */
+      position: absolute;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    .left-text {
+      color: white;
+      width: 100%;
+      text-align: left;
+      padding: 20px;
+      margin: 0;
+      box-sizing: border-box;
+      display: block;
+      /* Remove absolute positioning */
+    }
+    /* Messages container with scrolling */
+    .chat-messages {
+      height: 400px;
+      overflow-y: auto;
+      padding: 20px;
+    }
+
+    /* Base message bubble styling */
+    .message {
+      margin-bottom: 10px;
+      padding: 10px;
+      border-radius: 5px;
+    }
+
+    /* User message styling - aligned right */
+    .user-message {
+      background-color: #e3f2fd;
+      margin-left: 20%;
+    }
+
+    /* Bot message styling - aligned left */
+    .bot-message {
+      background-color: #f5f5f5;
+      margin-right: 20%;
+    }
+
+    /* Error message styling */
+    .message.error {
+      background-color: #ffebee;
+      color: #c62828;
+      border: 1px solid #ffcdd2;
+    }
+
+    /* Input area container */
+    .input-container {
+      padding: 20px;
+      border-top: 1px solid #ddd;
+    }
+    /* Text input field styling */
+    #user-input {
+      width: 80%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      margin-right: 10px;
+    }
+
+    /* Send button styling */
+    button {
+
+      padding: 10px 20px;
+      background-color: #2196f3;
+      color: white;
+      border: none;
+      border-radius: 100px;
+      cursor: pointer;
+    }
+
+    /* Button hover effect */
+    button:hover {
+      background-color: #1976d2;
+    }
+
+    .content-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 60vh;
+      gap: 20px;
+    }
+
+    .Home-Image {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .start-chat-btn {
+      padding: 15px 30px;
+      font-size: 1.2em;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+
+<body>
+  <h1 class="centered-text">AI Therapist</h1>
+  <div class="content-container">
+    <div class="Home-Image">
+      <img src="https://images.tech.co/wp-content/uploads/2023/10/31053923/AdobeStock_611825692-1-1-e1698745232416-708x400.jpeg"alt="Image" height="150" width="300">
     </div>
+    <button class="start-chat-btn" onclick="window.location.href='/chat'">Start Chat</button>
+  </div>
+  <h3 class="left-text">Our AI Therapist website offers a compassionate and accessible mental health support
+    platform powered by advanced artificial intelligence. Whether you're looking for guidance on managing stress,
+    anxiety, or simply seeking someone to talk to, our AI-driven sessions provide personalized, confidential assistance
+    24/7. With an intuitive interface and a range of therapeutic techniques, our AI therapist adapts to your unique
+    needs, helping you feel heard, understood, and supported on your mental health journey.
+  </h3>
+</body>
 
-    <script>
-      async function sendMessage() {
-        const input = document.getElementById("user-input");
-        const message = input.value.trim();
-        if (message === "") return;
-
-        // Add user message to chat
-        addMessage(message, "user-message");
-        input.value = "";
-
-        try {
-            const response = await fetch('/api/chat', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ message })
-            });
-            
-            const data = await response.json();
-            addMessage(data.response, "bot-message");
-        } catch (error) {
-            console.error('Error:', error);
-            addMessage("Sorry, something went wrong", "bot-message");
-        }
-      }
-
-      function addMessage(text, className) {
-        const messagesDiv = document.getElementById("chat-messages");
-        const messageDiv = document.createElement("div");
-        messageDiv.className = `message ${className}`;
-        messageDiv.textContent = text;
-        messagesDiv.appendChild(messageDiv);
-        messagesDiv.scrollTop = messagesDiv.scrollHeight;
-      }
-    </script>
-  </body>
 </html>
